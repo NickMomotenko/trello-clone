@@ -11,6 +11,8 @@ const RowWrapp = styled.div`
 const ColumnWrapp = styled.div`
   display: inline-flex;
   flex-direction: column;
+
+  width: 100%;
 `;
 
 const CircleWrapp = styled.div`
@@ -57,7 +59,7 @@ export const Row = (props) => {
 };
 
 export const Column = (props) => {
-  return <ColumnWrapp>{props.children}</ColumnWrapp>;
+  return <ColumnWrapp {...props}>{props.children}</ColumnWrapp>;
 };
 
 export const Circle = (props) => {

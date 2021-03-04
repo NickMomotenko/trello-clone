@@ -50,16 +50,59 @@ const App = () => {
 
   const project_1 = projects[0];
 
-  const renderStatus = (status) => {
-    if (status === "backlog") {
-      return `Backlog`;
-    } else if (status === "review") {
-      return `In review`;
-    } else if (status === "progress") {
-      return `In Progress`;
-    } else if (status === "done") {
-      return `Done`;
-    } else return `Без статуса`;
+  const findAllStatus = (arr) => {
+    let newArr = [];
+
+    arr.forEach((plank) => {
+      if (!newArr.includes(plank.status)) {
+        newArr.push(plank.status);
+      }
+    });
+
+    return newArr;
+  };
+
+  const renderPlank = (status, arr) => {
+    return arr
+      .filter((plank) => status === plank.status)
+      .map((task) => (
+        <Column key={task.id} style={{ marginBottom: "20px" }}>
+          <MiniPaper>
+            <Row style={{ marginBottom: "10px" }}>
+              <Label label={task.label} />
+              <ButtonCircle icon={optionDotsIcon} />
+            </Row>
+
+            <Title
+              style={{ fontSize: "20px", marginBottom: "15px" }}
+              label={task.title}
+            />
+            <Block style={{ marginBottom: "20px" }}>
+              <Image icon={task.image} />
+            </Block>
+
+            <Row style={{ marginBottom: "15px" }}>
+              <AvatarMultiRow>
+                {project_1.people.map((item) => (
+                  <Avatar key={item.id} link={item.link} url={item.avatar} />
+                ))}
+              </AvatarMultiRow>
+              <Circle count={project_1.people.length} />
+            </Row>
+
+            <Row>
+              <Block>
+                <Icon icon={commentsIcon} />
+                {`${task.attachments.length} files`}
+              </Block>
+              <Block>
+                <Icon icon={clipIcon} />
+                {`${task.comments.length} comments`}
+              </Block>
+            </Row>
+          </MiniPaper>
+        </Column>
+      ));
   };
 
   return (
@@ -97,68 +140,36 @@ const App = () => {
           </Row>
         </Paper>
         <AppContent>
-          {project_1.data.map((task) => {
-            if (task.status === "done") {
-              return (
-                <Row style={{ marginBottom: "23px" }}>
-                  <Title
-                    label={renderStatus(task.status)}
-                    style={{ color: "#ff77a1", fontSize: "30px" }}
-                  />
-                  <ButtonCircle icon={optionDotsIcon} />
-                </Row>
-              );
-            }
-          })}
-          {/* {project_1.data.map((task) => {
-            if (task.status === "done") {
-              return (
-                <>
-                  <Column key={task.id}>
-                    <MiniPaper style={{ width: "300px", marginBottom: "25px" }}>
-                      <Row style={{ marginBottom: "10px" }}>
-                        <Label label={task.label} />
-                        <ButtonCircle icon={optionDotsIcon} />
-                      </Row>
-
-                      <Title
-                        style={{ fontSize: "20px", marginBottom: "15px" }}
-                        label={task.title}
-                      />
-                      <Block style={{ marginBottom: "20px" }}>
-                        <Image icon={task.image} />
-                      </Block>
-
-                      <Row style={{ marginBottom: "15px" }}>
-                        <AvatarMultiRow>
-                          {project_1.people.map((item) => (
-                            <Avatar
-                              key={item.id}
-                              link={item.link}
-                              url={item.avatar}
-                            />
-                          ))}
-                        </AvatarMultiRow>
-                        <Circle count={project_1.people.length} />
-                      </Row>
-
-                      <Row>
-                        <Block>
-                          <Icon icon={commentsIcon} />
-                          {`${task.attachments.length} files`}
-                        </Block>
-                        <Block>
-                          <Icon icon={clipIcon} />
-                          {`${task.comments.length} comments`}
-                        </Block>
-                      </Row>
-                    </MiniPaper>
-                    <Button label="Add new task" />
-                  </Column>
-                </>
-              );
-            }
-          })} */}
+          <Row style={{ marginRight: "-20px" }}>
+            {findAllStatus(project_1.data).map((status) => (
+              <Row
+                key={status}
+                style={{ margin: "0 20px 25px 0", width: "300px" }}
+              >
+                <Title
+                  label={status}
+                  style={{ color: "#ff77a1", fontSize: "30px" }}
+                />
+                <ButtonCircle icon={optionDotsIcon} />
+              </Row>
+            ))}
+          </Row>
+          <Block style={{ marginRight: "-20px", alignItems: "flex-start" }}>
+            {findAllStatus(project_1.data).map((status) => (
+              <Column style={{ marginRight: "20px" }}>
+                <Block
+                  key={status}
+                  style={{
+                    width: "300px",
+                    display: "inline-block",
+                  }}
+                >
+                  {renderPlank(status, project_1.data)}
+                </Block>
+                <Button label="Add new task" />
+              </Column>
+            ))}
+          </Block>
         </AppContent>
       </AppMain>
     </AppWrapp>
