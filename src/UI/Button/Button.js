@@ -24,7 +24,7 @@ const ButtonWrapp = styled.button`
 
   &:before {
     content: "+";
-    display: inline-block;
+    display: ${(props) => (props.noImage ? "none" : "inline-block")};
 
     height: 5px;
     width: 5px;

@@ -12,8 +12,10 @@ const MiniPaperWrapp = styled.div`
   padding: 30px 20px;
 `;
 
-const MiniPaper = (props) => {
-  return <MiniPaperWrapp {...props}>{props.children}</MiniPaperWrapp>;
-};
+const MiniPaper = React.forwardRef((props, ref) => (
+  <MiniPaperWrapp ref={ref} {...props}>
+    {props.children}
+  </MiniPaperWrapp>
+));
 
 export default MiniPaper;
